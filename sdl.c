@@ -21,6 +21,7 @@ int creationfentre()
         SDL_Log("ERROR :SDL INITIALISATION - %s \n",SDL_GetError());
         exit(EXIT_FAILURE);
     }
+    
     window1=SDL_CreateWindow("Fenetre gauche",0,0,400,300,SDL_WINDOW_RESIZABLE);
     if(window1==NULL)
     {
