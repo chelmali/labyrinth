@@ -213,7 +213,7 @@ int main(int argc, char** argv) {
 
     srand(time(NULL) );
 
-    for(i=0;i<700;i++)
+    for(i=0;i<1000;i++)
 
   {
 
@@ -231,7 +231,7 @@ int main(int argc, char** argv) {
 
       SDL_RenderClear(renderer);// affichage
 
-  SDL_Delay(1000);    }                                                  // Pause exprimée en ms
+  SDL_Delay(500);    }                                                  // Pause exprimée en ms
 
   //if ( i>=700)
 
