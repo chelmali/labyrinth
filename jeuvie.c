@@ -1,7 +1,15 @@
+
 #include <SDL2/SDL.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+#include"time.h"
+#include"jeuvie.h"
+
+int Tabsurvie[9]={0,1,1,0,0,0,0,0,0};
+int TABnaissance[9]={0,0,1,0,0,0,0,0,0};
+int largeur =30;
+int hauteur =30;
 void end_sdl(char ok,char const* msg,SDL_Window* window,SDL_Renderer* renderer) {                           
   char msg_formated[255];                                         
   int l;                                                          
@@ -23,65 +31,19 @@ void end_sdl(char ok,char const* msg,SDL_Window* window,SDL_Renderer* renderer) 
          exit(EXIT_FAILURE);                                              
   }                                                               
 } 
-void drawtraits(SDL_Renderer *renderer)
-{
-  for (int k=0;k<1500;k=k+30)
-  {
-    SDL_SetRenderDrawColor(renderer,0,0,0,255);
-    SDL_RenderDrawLine(renderer,k,0,k,900);
-  }
-  for (int l=0;l<1500;l=l+30)
-  {
-    SDL_SetRenderDrawColor(renderer,0,0,0,255);
-    SDL_RenderDrawLine(renderer,0,l,1500,l);
-  }
-}
-void drawgrille(SDL_Renderer *renderer)
-{
-    SDL_Rect rectangle;
-    rectangle.x=0;
-    rectangle.y=0;
-    rectangle.w=1200;
-    rectangle.h=1200;
-    SDL_SetRenderDrawColor(renderer,237,237,237,255);
-    SDL_RenderFillRect(renderer,&rectangle);
-    for (int k=0;k<500;k=k+50)
-    {
-      SDL_RenderDrawLine(renderer,100+k,0,100+k,600);
-    }
-    
-}
-void drawrectangle(SDL_Renderer* renderer,int x,int y,int height,int width)
-{
-    SDL_Rect rectangle;                                             
 
-    SDL_SetRenderDrawColor(renderer,0,0,0,255);                                                              
-    rectangle.x = x;                                                    
-    rectangle.y = y;                                                    
-    rectangle.w = width;                                                 
-    rectangle.h = height;                           
-    SDL_RenderFillRect(renderer, &rectangle);
-    
-}
-void to_white_rectangle(SDL_Renderer* renderer,int x,int y,int height,int width)
-{
-    SDL_Rect rectangle;                                             
-
-    SDL_SetRenderDrawColor(renderer,255,255,255,255);  
-                                                    
-    rectangle.x = x;                                                    
-    rectangle.y = y;                                                    
-    rectangle.w = width;                                               
-    rectangle.h = height;                                               
-
-    SDL_RenderFillRect(renderer, &rectangle);
-    SDL_RenderClear(renderer);
-}
 int main(int argc, char** argv) {
   (void)argc;
   (void)argv;
-  //int offset3=0;
-  //int offset4=0;
+  int mat[10][10];
+  int mat2[10][10];
+  int i=0;
+  int j=0;
+  int x=0;
+  int y=0;
+  SDL_bool program_launche= SDL_TRUE;
+  int pause=0; 
+
 
   SDL_Window* window = NULL;
   SDL_Renderer* renderer = NULL;
@@ -103,20 +65,176 @@ int main(int argc, char** argv) {
   renderer = SDL_CreateRenderer(
            window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if (renderer == NULL) end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
-  drawgrille(renderer);
-  drawtraits(renderer);
-  //drawrectangle(renderer,0,0,30,30);
-  /*for (int j=0;j<20;j++)
+
+  initialisermatrice(mat);
+  affichermatrice(mat);
+  printf("  \n%d\n",nbvoisins(mat,0,0));
+  nouveauemplaire(mat,mat2);
+  affichermatrice(mat);
+  while(program_launche)
   {
-    drawrectangle(renderer,offset3,offset4,30,30);
-    SDL_RenderPresent(renderer); 
-    to_white_rectangle(renderer,offset3,offset4,30,30); 
-    SDL_Delay(500);  
-    offset3=offset3+30;
-    offset4=offset4+30;
-  }*/
-  SDL_RenderPresent(renderer);
-  SDL_Delay(2000);
+    SDL_Event event;
+    while (SDL_PollEvent(&event))
+    {
+      switch(event.type)
+      {
+        case SDL_QUIT:
+          program_launche=SDL_FALSE;
+          break;
+        case SDL_KEYDOWN:
+          switch(event.key.keysym.sym)
+          {
+            case SDLK_q:
+              program_launche=SDL_FALSE;
+            // case SDLK_SPACE:
+            //   pause=1;
+              
+
+            default :
+              continue;
+
+          }
+        case SDL_MOUSEBUTTONDOWN:
+          initialisermatrice(mat);
+          
+
+        default :
+          continue ;
+      }
+    }
+      if (pause==0)
+      {
+        nouveauemplaire(mat,mat2);
+        affichermatrice(mat);
+        SDL_SetRenderDrawColor(renderer,250,250,250,250);
+        SDL_RenderClear(renderer);
+        while(i<30)
+      {
+          while(j<30)
+          {
+              SDL_Rect rectangle ={x,y,largeur,hauteur};
+              x=x+largeur;
+              SDL_SetRenderDrawColor(renderer,0,0,0,255);
+              if (mat[i][j]==0)
+              {
+                  SDL_RenderFillRect(renderer,&rectangle);
+              }
+              j++;
+          }
+          y=y+hauteur;
+          j=0;
+          x=0;
+          i++;
+      }
+      SDL_RenderPresent(renderer);
+      SDL_Delay(50);
+      i=0;
+      j=0;
+      x=0;
+      y=0;
+        
+      }
+      // nouveauemplaire(mat,mat2);
+      // affichermatrice(mat);
+      // SDL_SetRenderDrawColor(renderer,250,250,250,250);
+      // SDL_RenderClear(renderer);
+      // while(i<30)
+      // {
+      //     while(j<30)
+      //     {
+      //         SDL_Rect rectangle ={x,y,largeur,hauteur};
+      //         x=x+largeur;
+      //         SDL_SetRenderDrawColor(renderer,0,0,0,255);
+      //         if (mat[i][j]==0)
+      //         {
+      //             SDL_RenderFillRect(renderer,&rectangle);
+      //         }
+      //         j++;
+      //     }
+      //     y=y+hauteur;
+      //     j=0;
+      //     x=0;
+      //     i++;
+      // }
+      // SDL_RenderPresent(renderer);
+      // SDL_Delay(50);
+      // i=0;
+      // j=0;
+      // x=0;
+      // y=0;
+    
+  }
+  return 0;
+
 
 }
+void initialisermatrice(int mat[10][10])
+{
+  srand(time(NULL));
+  for (int i=0;i<10;i++)
+  {
+    for (int j=0;j<10;j++)
+    {
+      mat[i][j]=rand()%2;
+    }
+  }
+}
+void affichermatrice(int mat[10][10])
+{
+  for (int i=0;i<10;i++)
+  {
+    for (int j=0;j<10;j++)
+    {
+      printf("%d ",mat[i][j]);
+    }
+    printf("\n");
+  }
+}
+int  nbvoisins(int mat[10][10],int i,int j)
+{
 
+  int count=0;
+  for (int x=-1;x<2;x++)
+  {
+    for (int y=-1;y<2;y++)
+    {
+      count=count+mat[(i+10+x)%10][(j+y+10)%10];
+    }
+  }
+  count-=mat[i][j];
+  return count;
+}
+void regle(int mat[10][10],int i,int j,int mat2[10][10])
+{
+  int voisin;
+  voisin=nbvoisins(mat,i,j);
+  if (mat[i][j]==1)
+  {
+    mat2[i][j]=Tabsurvie[voisin];
+  }
+  else 
+  {
+    mat2[i][j]=TABnaissance[voisin];
+  }
+  
+ 
+  
+}
+void nouveauemplaire(int mat[10][10],int mat2[10][10])
+{
+  for (int i=0;i<10;i++)
+  {
+    for (int j=0;j<10;j++)
+    {
+      regle(mat,i,j,mat2);
+    }
+  }
+  for (int k=0;k<10;k++)
+  {
+    for (int l=0;l<10;l++)
+    {
+      mat[k][l]=mat2[k][l];
+    }
+  }
+}
+//gcc jeuvie.c  -Wall -Wextra  -lm -lSDL2_image -o jeu $(sdl2-config --cflags --libs)
