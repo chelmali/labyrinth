@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
           i++;
       }
       SDL_RenderPresent(renderer);
-      SDL_Delay(50);
+      SDL_Delay(100);
       i=0;
       j=0;
       x=0;
