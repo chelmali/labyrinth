@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include"graph.h"
 #include<time.h>
-//  #include"part.h"
+
 
 
 
@@ -15,7 +15,7 @@ arbre_t * generergraph(int n)
     {
         arb->nbnoeuds=n;
        arb->listearete=malloc(((n*(n-1))/2)*sizeof(arete_t));
-       for(int i=1;i<n;i++)
+       for(int i=1;i<arb->nbnoeuds;i++)
        {
            for(int j=0;j<i;j++)
            {
@@ -30,8 +30,11 @@ arbre_t * generergraph(int n)
            }
            
        }
+        ((arb->listearete)[k]).tab[0]=-1;  //fin du graph est marqué par le couple (-1,-1)
+        ((arb->listearete)[k]).tab[1]=-1;
+
     }
-    for(int i=0;i<n;i++)
+    for(int i=0;i<arb->nbnoeuds ;i++)
     {
         printf("( %d,%d)\n",((arb->listearete)[i]).tab[0],((arb->listearete)[i]).tab[1]);
     }
@@ -45,6 +48,8 @@ arbre_t *cmpconnex(part_t * partition, arbre_t * arb)
     while(((arb->listearete)[k].tab[0])!= -1)
     {
         fusion(partition,arb->nbnoeuds,((arb->listearete)[k]).tab[0],((arb->listearete)[k]).tab[1]);
+        ((arb->listearete)[k]).tab[0]=((arb->listearete)[k]).tab[0];
+        ((arb->listearete)[k]).tab[1]=((arb->listearete)[k]).tab[1];
         k++;
         
     }
@@ -72,6 +77,43 @@ void affichergraph(arbre_t *arb, char * nomfichier,int n)
         fclose(fichier); // On ferme le fichier qui a été ouvert
     }
 
+}
+void graphmini(part_t *partition,arbre_t * arb,arete_t *listearete)
+{
+    int k=0;
+    int j=0;
+    listearete->tab[0]=arb->listearete[k].tab[0];
+    listearete->tab[1]=arb->listearete[k].tab[1];
+    while(((arb->listearete)[k].tab[0])!= -1)
+    {
+        if(findtop(partition,((arb->listearete)[k].tab[0]))!=findtop(partition,arb->listearete[k].tab[1]))
+        {
+            fusion(partition,arb->nbnoeuds,((arb->listearete)[k].tab[0]),((arb->listearete)[k].tab[1]));
+            ((arb->listearete)[j].tab[0])=((arb->listearete)[k].tab[0]);
+            ((arb->listearete)[j].tab[0])=((arb->listearete)[k].tab[0]);
+            j++;
+            
+            
+        }
+        k++;
+
+        
+    }
+    (arb->listearete)[j].tab[0]=-1;
+    (arb->listearete)[j].tab[1]=-1;
+}
+arbre_t* kruskal(part_t* partition,arbre_t* arb)
+{
+    arbre_t* graphs =generergraph(arb->nbnoeuds);
+    partition = initialisation(partition,arb->nbnoeuds);
+    // listearete_t* listearetes = init_listearete(listearetes,graph->nb_noeud);
+
+
+    lister_partition(partition,arb->nbnoeuds);
+    graphmini(partition,arb,graphs->listearete);
+    lister_partition(partition,arb->nbnoeuds);
+
+    return graphs;
 }
 
 // dot -Tpng graph.gv -o file.png && sxiv file.png

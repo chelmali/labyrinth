@@ -1,12 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
-// #include "part.h"
 #include"graph.h"
 
 
 
 
-part_t* init(part_t* partition,int taille)
+part_t* initialisation(part_t* partition,int taille)
 {
     partition = malloc(sizeof(part_t));
 
@@ -33,7 +32,7 @@ part_t* init(part_t* partition,int taille)
     return partition;
 }
 
-int chercher_racine(part_t* partition , int noeud)
+int findtop(part_t* partition , int noeud)
 {
     int racine=noeud;
     while(racine != (partition->pere)[racine])
@@ -49,29 +48,29 @@ void fusion(part_t* partition ,  int taille , int x ,int y)
         fprintf(stderr, "ERREUR : indice n'existe pas \n");
     } 
 
-    int r_x = chercher_racine(partition,x);
-    int r_y = chercher_racine(partition,y);
+    int tx = findtop(partition,x);
+    int ty = findtop(partition,y);
 
-    if( (partition->hauteur)[r_x] < (partition->hauteur)[r_y] )
-        (partition->pere)[r_x] = r_y ;
-    else if( (partition->hauteur)[r_x] > (partition->hauteur)[r_y] )
-        (partition->pere)[r_y] = r_x ;
+    if( (partition->hauteur)[tx] < (partition->hauteur)[ty] )
+        (partition->pere)[tx] = ty ;
+    else if( (partition->hauteur)[tx] > (partition->hauteur)[ty] )
+        (partition->pere)[ty] = tx ;
     else{
-        (partition->pere)[r_y] = r_x ;
-        (partition->hauteur)[r_x]++;
+        (partition->pere)[ty] = tx ;
+        (partition->hauteur)[tx]++;
     }
 }
 
 
 void lister_classe(part_t* partition, int taille, int val)
 {
-    int racine = chercher_racine(partition,val);
+    int racine = findtop(partition,val);
     int classe[taille];
     int k=0 , j=0;
 
     for(int i=0 ; i<taille ; i++)
     {
-        int r_i = chercher_racine(partition,i);
+        int r_i = findtop(partition,i);
         if(r_i == racine)
         {
             classe[k]=i;
@@ -90,7 +89,7 @@ void lister_classe(part_t* partition, int taille, int val)
     printf(" }");
 }
 
-void list_partition(part_t* partition , int taille)
+void lister_partition(part_t* partition , int taille)
 {
     printf("{");
     for(int i=0 ; i<taille ; i++)

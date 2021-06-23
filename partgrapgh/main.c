@@ -2,26 +2,41 @@
 #include <stdio.h>
 #include"graph.h"
 #include<time.h>
-// #include"part.h"
+
 int main(int argc,char ** argv)
 {
     (void)argc;
     (void)argv;
     int i=0;
-    part_t* partition=init( partition,5);
+    part_t* partition=initialisation( partition,5);
     arbre_t * arb=generergraph(5);
-    //affichergraph(arb,"graph.gv",5);
-    arb=cmpconnex( partition, arb);
-    for(int i=0;i<5;i++)
+
+    FILE* fichier1 = NULL;
+
+    fichier1 = fopen("graph1.gv", "w");
+
+    if (fichier1 != NULL)
     {
+      int i=0;
+       fputs("graph G { \n",fichier1);
+         while(((arb->listearete)[i]).tab[0]!=-1)
+       {
         
-        printf("{");       
-        printf( "%d",((arb->listearete)[i]));
-            
+               
+            fprintf(fichier1,"   %d--%d  \n",((arb->listearete)[i]).tab[0],((arb->listearete)[i]).tab[1]); 
+             i++;
                
            
+       }
+
+       fprintf(fichier1,"}");
+       fclose(fichier1);
     }
-    printf("}\n");
+    // affichergraph(arb,"graph.gv",5);
+    
+    // arb=cmpconnex( partition, arb);
+     //graphmini(partition,arb);
+     kruskal(partition,arb);
 
     FILE* fichier = NULL;
 
@@ -30,12 +45,14 @@ int main(int argc,char ** argv)
     if (fichier != NULL)
     {
        fputs("graph G { \n",fichier);
-         for(int i=0;i<5;i++)
+       int j=0;
+       while(((arb->listearete)[j]).tab[0]!=-1)
+         
        {
         
                
-            fprintf(fichier,"   %d--%d  \n",((arb->listearete)[i]).tab[0],((arb->listearete)[i]).tab[1]); 
-            // i++;
+            fprintf(fichier,"   %d--%d  \n",((arb->listearete)[j]).tab[0],((arb->listearete)[j]).tab[1]); 
+            j++;
                
            
        }
