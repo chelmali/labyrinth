@@ -3,73 +3,7 @@
 #include<time.h>
 #include"djikstra.h"
 
-// #include "dijkstra.h"
 
-// #include"tas.h"
-// #define infinity 120
-// //tester si une arete existe entre deux noeuds k et l dans un graphe
-// arete_t * arete (arbre_t  * graph, int k, int l)
-// {
-//     arete_t * areterecherche=NULL
-//     int nb=graph->nbnoeuds;
-//     int nbaretes=((nb+2)*(nb-1))/2;
-//     int bool=0;
-//     for(int i=0;i<nbaretes;i++)
-//     {
-//         areterecherche=&(graph->listearete[i]);
-//         if((areterecherche.tab[0]==k && areterecherche.tab[1]==l) || (areterecherche.tab[0]==l && areterecherche.tab[1]==k))
-//         {
-//             bool=1;
-//         }
-//         break;
-//     }
-//     return areterecherche;
-// }
-// //initialiser un tableau de distance de tout les noeus du graph 
-// int * initialiser_distance(arbre_t * graph)
-// {
-//     int nb=graph->nbnoeuds;
-//     int * distance=(int *)malloc(nb*sizeof(int));
-//     if (distance==NULL)
-//     {
-//         printf("erreur lors de l'allocation du tableau des distances");
-//         exit(EXIT_FAILURE);
-//     }
-//     else
-//     {
-//         for (int i=0;i<nb;i++)
-//         {
-//             distance[i]=infinity;
-//         }
-//     }
-//     return distance;
-// }
-// //initialiser le tableau de pere pour tous les noeuds du graph
-// int *initialiser_pere(arbre_t *graph)
-// {
-//     int nb=graph->nbnoeuds;
-//     int * pere=(int *)malloc(nb*sizeof(int))
-//     for (int i=0,i<nb,i++)
-//     {
-//             pere[i]=-1;
-//     }
-// }
-
-// #define TAILLE 5			/* nombre de sommets du graphe */
-// #define MAXINT 1000			/* un tres grand entier */
-
-// typedef struct cellule			/* noeud, poids et pointeur */
-// {	int numero;
-// 	int poids;
-// 	struct cellule *suivant;
-// } Cellule, *LISTE;
-
-// LISTE graphe[TAILLE];			/* graphe = tableau de listes */
-// int D[TAILLE];				/* Les distances trouvees a chaque instant */
-// int queue[TAILLE];			/* file pour les sommets selon D croissant */
-// int ordre[TAILLE];			/* Ordre de chaque sommet dans la file selon D croissant */
-// int explore[TAILLE];			/* Pour les sommets deja ajoutes */
-// int C[TAILLE];				/* pour le predecesseur de chaque sommet ajoute */
 
 /// fonction qui permet l'allocation d'un noeud
 noeud_t  *initialisation()
